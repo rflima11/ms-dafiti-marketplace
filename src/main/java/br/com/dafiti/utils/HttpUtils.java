@@ -8,6 +8,9 @@ import okhttp3.HttpUrl;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Métodos utilitários para montar a url e definir parâmetros em comum para todas as chamadas HTTP
+ */
 public class HttpUtils {
 
     private HttpUtils() { throw new IllegalStateException("Classe utilitária, não deve ser instanciada"); }
@@ -23,6 +26,7 @@ public class HttpUtils {
 
         return httpBuilder.build();
     }
+
 
     public static Map<String, String> defaultParamsApiCall(ActionConstants actionConstants) {
         Map<String, String> map = new HashMap<>();

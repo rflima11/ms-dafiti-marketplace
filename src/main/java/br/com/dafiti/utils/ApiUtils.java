@@ -12,9 +12,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.TreeMap;
 
+/**
+ * Métodos utilitários para configuração da API e hash de token de autorização.
+ */
 public class ApiUtils {
 
     private ApiUtils() { throw new IllegalStateException("Classe utilitária, não deve ser instanciada"); }
@@ -26,8 +28,8 @@ public class ApiUtils {
     }
 
     public static String sign(Map<String, String> params) throws SdkException {
-        NavigableMap<String, String> sortedParams = new TreeMap(params);
-        String concat = "";
+        var sortedParams = new TreeMap(params);
+        var concat = "";
 
         try {
             String key;
@@ -45,8 +47,8 @@ public class ApiUtils {
 
     private static String hmacDigest(String msg, String keyString) throws SdkException {
         try {
-            SecretKeySpec key = new SecretKeySpec(keyString.getBytes(), "HmacSHA256");
-            Mac mac = Mac.getInstance("HmacSHA256");
+            var key = new SecretKeySpec(keyString.getBytes(), "HmacSHA256");
+            var mac = Mac.getInstance("HmacSHA256");
             mac.init(key);
             byte[] rawHmac = mac.doFinal(msg.getBytes());
             StringBuilder hash = new StringBuilder();

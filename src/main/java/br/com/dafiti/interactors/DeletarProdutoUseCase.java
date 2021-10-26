@@ -11,6 +11,9 @@ public class DeletarProdutoUseCase {
         this.produtoRepository = produtoRepository;
     }
 
+    /**
+     *  Deleção do produto pelo ID
+     */
     public void executar(RequestDeletarProduto request) throws Exception {
         produtoRepository.deletarProduto(request);
     }

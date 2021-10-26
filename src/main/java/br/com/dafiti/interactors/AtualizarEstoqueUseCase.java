@@ -11,6 +11,9 @@ public class AtualizarEstoqueUseCase {
         this.produtoPort = produtoPort;
     }
 
+    /**
+     *  Atualiza o estoque informando o SellerSku e a Quantidade, recebe uma lista de produtos.
+     */
     public void executar(RequestAtualizarEstoqueProduto request) throws Exception {
         produtoPort.atualizarProduto(request);
     }

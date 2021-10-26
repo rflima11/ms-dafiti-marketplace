@@ -1,5 +1,8 @@
 package br.com.dafiti.constants;
 
+/**
+ * Constantes utilizadas para mensagens de Exceptions
+ */
 public enum ExceptionConstants {
 
     ERRO_CONVERTER_DTO("Não foi possível converter o DTO "),

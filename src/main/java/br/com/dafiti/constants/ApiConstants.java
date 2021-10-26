@@ -1,5 +1,8 @@
 package br.com.dafiti.constants;
 
+/**
+ * Constantes utilizadas para configurações gerais da API, como autenticação por exemplo.
+ */
 public enum ApiConstants {
 
     USER_ID("vendasamiparis@gmail.com"),

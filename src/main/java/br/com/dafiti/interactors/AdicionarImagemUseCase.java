@@ -11,6 +11,9 @@ public class AdicionarImagemUseCase {
         this.produtoRepository = produtoRepository;
     }
 
+    /**
+     * Serviço responsável por adicionar uma imagem ao produto já criado.
+     */
     public void executar(RequestAdicionarImagemProduto request) throws Exception {
         produtoRepository.adicionarImagemProduto(request);
     }

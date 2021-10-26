@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 
+/**
+ * Métodos utilitários para configuração de um client XmlMapper
+ */
 public class XmlMapperFactory {
 
     private XmlMapperFactory() { throw new IllegalStateException("Classe utilitária, não deve ser instanciada"); }

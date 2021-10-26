@@ -3,13 +3,15 @@ package br.com.dafiti.datasources.http;
 import br.com.dafiti.constants.ActionConstants;
 import br.com.dafiti.constants.ExceptionConstants;
 import br.com.dafiti.datasources.http.exceptions.OkHttpException;
-import br.com.dafiti.entities.response.SucessResponseDTO;
-import br.com.dafiti.repository.FeedRepository;
+import br.com.dafiti.entities.pedido.response.ResponseObterPedido;
+import br.com.dafiti.entities.pedido.response.ResponseObterPedidoItems;
+import br.com.dafiti.repository.OrderRepository;
 import br.com.dafiti.utils.HttpUtils;
 import br.com.dafiti.utils.OkHttpClientFactory;
 import br.com.dafiti.utils.XmlMapperFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.rocketlabs.sellercenterapi.exceptions.SdkException;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -21,62 +23,60 @@ import java.io.IOException;
 /**
  * Classe montada responsável pelas chamadas HTTP na API da Dafiti por meio do client OkHttpClient
  */
-public class FeedDafiti implements FeedRepository {
+public class OrderDafiti implements OrderRepository {
 
-    private static final Logger logger = LogManager.getLogger(FeedDafiti.class);
+    private static final Logger logger = LogManager.getLogger(OrderDafiti.class);
+
+    private static final MediaType XML = MediaType.get("application/xml; charset=utf-8");
 
     private final OkHttpClient okHttpClient;
     private final Request.Builder requestBuilder;
     private final XmlMapper xmlMapper;
 
-    public FeedDafiti() {
+    public OrderDafiti() {
         this.okHttpClient = OkHttpClientFactory.getClient();
         this.requestBuilder = new Request.Builder();
         this.xmlMapper = XmlMapperFactory.getXmlMapper();
     }
 
     @Override
-    public SucessResponseDTO feedStatus(String feedId) throws Exception {
+    public ResponseObterPedido consultarPedido(Long orderId) throws OkHttpException {
         try {
-            var request = this.getRequestFeedStatus(ActionConstants.FEED_STATUS, feedId);
+            var request = this.getRequestFeedStatus(ActionConstants.GET_ORDER, orderId);
             var response = this.okHttpClient.newCall(request).execute();
-            var responseAsString = response.body().string();
             if (isResponseError(response)) {
                 throw new OkHttpException(ExceptionConstants.OK_HTTP_EXCEPTION_MSG.getValue(), response.code());
             }
-            return xmlMapper.readValue(responseAsString, SucessResponseDTO.class);
-        } catch (IOException e) {
+            var responseAsString = response.body().string();
+            return xmlMapper.readValue(responseAsString, ResponseObterPedido.class);
+        } catch (IOException | SdkException e) {
             logger.info(ExceptionConstants.ERRO_CONVERTER_DTO.getValue() + e.getMessage());
         }
         return null;
     }
 
     @Override
-    public void feedList() throws Exception {
+    public ResponseObterPedidoItems consultarItensPedido(Long orderId) throws Exception {
         try {
-            var request = this.getRequestFeedList(ActionConstants.FEED_LIST);
+            var request = this.getRequestFeedStatus(ActionConstants.ORDER_GET_ITEMS, orderId);
             var response = this.okHttpClient.newCall(request).execute();
             if (isResponseError(response)) {
                 throw new OkHttpException(ExceptionConstants.OK_HTTP_EXCEPTION_MSG.getValue(), response.code());
             }
-        } catch (IOException e) {
+            var responseAsString = response.body().string();
+            return xmlMapper.readValue(responseAsString, ResponseObterPedidoItems.class);
+        } catch (IOException | SdkException e) {
             logger.info(ExceptionConstants.ERRO_CONVERTER_DTO.getValue() + e.getMessage());
         }
-
+        return null;
     }
 
-    private Request getRequestFeedStatus(ActionConstants actionConstants, String feedId) throws SdkException {
+
+    private Request getRequestFeedStatus(ActionConstants actionConstants, Long orderId) throws SdkException {
         var params = HttpUtils.defaultParamsApiCall(actionConstants);
-        params.put(ActionConstants.FEED_ID_KEY.getValue(), feedId);
+        params.put(ActionConstants.ORDER_ID_KEY.getValue(), orderId.toString());
         return this.requestBuilder
                 .url(HttpUtils.montarUrl(params))
-                .get()
-                .build();
-    }
-
-    private Request getRequestFeedList(ActionConstants actionConstants) throws SdkException {
-        return this.requestBuilder
-                .url(HttpUtils.montarUrl(HttpUtils.defaultParamsApiCall(actionConstants)))
                 .get()
                 .build();
     }

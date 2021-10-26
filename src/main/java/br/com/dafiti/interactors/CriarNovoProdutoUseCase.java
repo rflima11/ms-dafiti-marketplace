@@ -17,12 +17,16 @@ public class CriarNovoProdutoUseCase {
         this.produtoRepository = produtoRepository;
     }
 
+    /**
+     *  Primeiramente faz uma requisição para a criação de produto e em segundo momento faz uma segunda chamada para receber o feed e checar
+     *  se o produto foi criado ou não, caso não tenha sido criado levanta a exceção ErroCriacaoProdutoException.
+     */
     public void executar(RequestCriarNovoProduto request) throws Exception {
         var response = produtoRepository.criarProdutos(request);
         Thread.sleep(3000);
         var feed = buscaFeedPorId.executar(response.getHead().getRequestId());
 
-        if (feed.getBody().getFeedDetail().getFeedErrors().getError().isEmpty() && Objects.nonNull(feed.getBody())) {
+        if (Objects.nonNull(feed.getBody().getFeedDetail().getFeedErrors())) {
             throw new ErroCriacaoProdutoException(feed.getBody().getFeedDetail().getFeedErrors().getError().stream().map(er -> "ID: " + er.getCode() + "MSG: " + er.getMessage()).collect(Collectors.joining()));
         }
     }

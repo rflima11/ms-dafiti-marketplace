@@ -22,6 +22,9 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * Classe montada responsável pelas chamadas HTTP na API da Dafiti por meio do client OkHttpClient
+ */
 public class ProdutoDafiti implements ProdutoRepository {
 
     private static final Logger logger = LogManager.getLogger(ProdutoDafiti.class);
@@ -70,9 +73,7 @@ public class ProdutoDafiti implements ProdutoRepository {
         } catch (IOException e) {
             logger.info(ExceptionConstants.OK_HTTP_EXCEPTION_MSG.getValue() + e.getMessage());
         }
-
         return null;
-
     }
 
     @Override

@@ -4,6 +4,9 @@ import okhttp3.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Métodos utilitários para configuração de um client OkHttpClient
+ */
 public class OkHttpClientFactory {
 
     private OkHttpClientFactory() { throw new IllegalStateException("Classe utilitária, não deve ser instanciada"); }

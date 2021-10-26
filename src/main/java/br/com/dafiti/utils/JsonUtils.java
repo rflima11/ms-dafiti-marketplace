@@ -9,6 +9,9 @@ import javax.json.JsonReader;
 import java.io.StringReader;
 import java.util.Map;
 
+/**
+ * Métodos utilitários para trabalhar com JSON
+ */
 public class JsonUtils {
 
     private JsonUtils() { throw new IllegalStateException("Classe utilitária, não deve ser instanciada"); }
